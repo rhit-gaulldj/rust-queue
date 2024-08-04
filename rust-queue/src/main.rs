@@ -1,3 +1,10 @@
+mod queue;
+
+use queue::queue::{
+    Queue
+};
+
 fn main() {
-    println!("Hello, world!");
+    let testQ = Queue::<u32>::new();
+    println!("Initialized");
 }
