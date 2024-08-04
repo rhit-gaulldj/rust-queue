@@ -8,6 +8,8 @@ fn main() {
     println!("Initialized");
 
     let mut input = String::new();
+    let mut q1 = Queue::<u32>::new();
+    let mut q2 = Queue::<u32>::new();
 
     loop {
         display_menu();
@@ -16,13 +18,12 @@ fn main() {
             return;
         }
 
-        // TODO: Dispatch command
+        dispatch_command(&input, &mut q1, &mut q2);
     }
 }
 
 fn display_menu() -> () {
     println!("\tCommand - Result");
-    println!("\t\tg - toggle display menu");
     println!("\t\te - enqueue");
     println!("\t\td - dequeue");
     println!("\t\tr - replaceFront");
@@ -30,6 +31,9 @@ fn display_menu() -> () {
     println!("\t\tz - length");
     println!("\t\tx - transferFrom");
     println!("\t\t= - copy");
+    println!("\t\tp - print/display");
+    println!("\t\tc - clear");
+    println!("\t\tq - quit");
 
     print!("command: ");
 }
@@ -64,5 +68,64 @@ fn get_index() -> u32 {
             },
             Err(..) => println!("Please enter a number!")
         }
+    }
+}
+
+fn do_enqueue(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
+    let index = get_index();
+    println!("Not implemented");
+}
+
+fn do_dequeue(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
+    let index = get_index();
+    println!("Not implemented");
+}
+
+fn do_replace_front(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
+    let index = get_index();
+    println!("Not implemented");
+}
+
+fn do_front(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
+    let index = get_index();
+    println!("Not implemented");
+}
+
+fn do_length(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
+    let index = get_index();
+    println!("Not implemented");
+}
+
+fn do_transfer_from(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
+    println!("Not implemented");
+}
+
+fn do_copy(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
+    println!("Not implemented");
+}
+
+fn do_display(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
+    let index = get_index();
+    println!("Not implemented");
+}
+
+fn do_clear(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
+    let index = get_index();
+    println!("Not implemented");
+}
+
+fn dispatch_command(cmd: &String, q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
+    match cmd.as_str() {
+        "e" => do_enqueue(q1, q2),
+        "d" => do_dequeue(q1, q2),
+        "r" => do_replace_front(q1, q2),
+        "f" => do_front(q1, q2),
+        "z" => do_length(q1, q2),
+        "x" => do_transfer_from(q1, q2),
+        "=" => do_copy(q1, q2),
+        "p" => do_display(q1, q2),
+        "c" => do_clear(q1, q2),
+        "q" => println!("Exiting command interpreter"),
+        _ => println!("Invalid Command!"),
     }
 }
