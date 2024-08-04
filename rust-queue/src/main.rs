@@ -1,6 +1,6 @@
 mod queue;
 
-use queue::queue::Queue;
+use queue::queue::{Queue, QueueContract};
 
 use std::io::{stdin, stdout, Write};
 
@@ -88,12 +88,28 @@ fn do_replace_front(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
 
 fn do_front(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
     let index = get_index();
-    println!("Not implemented");
+    if index == 1 {
+        if q1.length() > 0 {
+            println!("Front of q{}: {}", index, q1.front());
+        } else {
+            println!("Error! Cannot get front of an empty queue");
+        }
+    } else {
+        if q2.length() > 0 {
+            println!("Front of q{}: {}", index, q2.front());
+        } else {
+            println!("Error! Cannot get front of an empty queue");
+        }
+    }
 }
 
 fn do_length(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
     let index = get_index();
-    println!("Not implemented");
+    if index == 1 {
+        println!("Length of q{}: {}", index, q1.length());
+    } else {
+        println!("Length of q{}: {}", index, q2.length());
+    }
 }
 
 fn do_transfer_from(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
@@ -111,7 +127,12 @@ fn do_display(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
 
 fn do_clear(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
     let index = get_index();
-    println!("Not implemented");
+    if index == 1 {
+        q1.clear();
+    } else {
+        q2.clear();
+    }
+    println!("Cleared q{}", index);
 }
 
 fn dispatch_command(cmd: &String, q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
