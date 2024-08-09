@@ -11,31 +11,30 @@ pub mod queue {
         // fn assign(&mut self, other: &Queue::<T>) -> ();
     }
 
-    enum NodeRecord<T> {
-        Empty,
-        Node { value: T, next: Box<NodeRecord<T>> },
+    type NodePointer<T> = Option<Box<Node<T>>>;
+
+    struct Node<T> {
+        item: T,
+        next: NodePointer<T>,
     }
 
     pub struct Queue<T> {
-        head: NodeRecord<T>,
+        head: NodePointer<T>,
         length: u32,
     }
 
     impl<T> QueueContract<T> for Queue<T> {
         fn clear(&mut self) -> () {
-            self.head = NodeRecord::Empty;
+            self.head = None;
+            self.length = 0;
         }
 
         fn front(&self) -> &T {
-            // Unlike in 373, must define every possible path in the match expression
-            // This means we don't have undefined behavior here, but we will terminate
-            // if the "external contract" of this function is violated
-
-            match &(self.head) {
-                NodeRecord::Empty => panic!("Cannot call 'front' on an empty queue."),
-                NodeRecord::Node { value, next: _ } => {
-                    value
-                }
+            // Must define every path, cannot have undefined behavior like C++
+            // So we have to explicitly handle the null case (which is Option None)
+            match self.head.as_ref() {
+                None => panic!("Cannot call front on an empty queue!"),
+                Some(node) => &node.item,
             }
         }
 
@@ -52,15 +51,16 @@ pub mod queue {
         //     match &self.head {
         //         NodeRecord::Empty => self.head = newNode,
         //         NodeRecord::Node { value, next } => {
-        //             let current: NodeRecord<T> = self.head;
+        //             let prev = NodeRecord::<T>::Empty;
+        //             let mut current = &mut self.head;
         //             loop {
-        //                 match current.next {
+        //                 match current {
         //                     NodeRecord::Empty => {
-        //                         current.next = newNode;
+                                
         //                         break;
         //                     },
         //                     NodeRecord::Node { value, next } => {
-        //                         current = next;
+        //                         current = *next;
         //                     },
         //                 };
         //             }
@@ -70,9 +70,9 @@ pub mod queue {
     }
 
     impl<T> Queue<T> {
-        pub fn new() -> Queue<T> {
+        pub fn new() -> Self {
             return Queue {
-                head: NodeRecord::Empty,
+                head: None,
                 length: 0,
             };
         }

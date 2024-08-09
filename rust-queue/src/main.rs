@@ -13,6 +13,7 @@ fn main() {
 
     loop {
         display_menu();
+        input.clear();
         get_command(&mut input);
         if input == "Q" || input == "q" {
             return;
@@ -55,8 +56,9 @@ fn get_index() -> u32 {
     let mut input_text = String::new();
 
     loop {
-        print!("Which index? 1 or 2: ");
+        println!("Which index? 1 or 2: ");
         stdin().read_line(&mut input_text).expect("Did not enter a correct string");
+        println!();
 
         let trimmed = input_text.trim();
         match trimmed.parse::<u32>() {
