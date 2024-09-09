@@ -141,7 +141,15 @@ fn do_length(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
 }
 
 fn do_transfer_from(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
-    println!("Not implemented");
+    print!("(Provide index of queue to receive the transfer)");
+    let index = get_index();
+    if index == 1 {
+        q1.transfer_from(q2);
+        println!("Transferred from q2 to q1");
+    } else {
+        q2.transfer_from(q1);
+        println!("Transferred from q1 to q2");
+    }
 }
 
 fn do_copy(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
@@ -155,6 +163,7 @@ fn do_display(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
     } else {
         q2.print();
     }
+    print!("\n");
 }
 
 fn do_clear(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {

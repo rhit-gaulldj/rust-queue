@@ -3,7 +3,7 @@ pub mod queue {
 
     pub trait QueueContract<T> where T : core::fmt::Display {
         fn clear(&mut self) -> ();
-        // fn transferFrom(&mut self, other: &mut Queue::<T>) -> ();
+        fn transfer_from(&mut self, other: &mut Queue::<T>) -> ();
         fn enqueue(&mut self, x: T) -> ();
         fn dequeue(&mut self) -> T;
         fn replace_front(&mut self, x: T) -> T;
@@ -120,6 +120,15 @@ pub mod queue {
                         item
                     }
                 },
+            }
+        }
+
+        fn transfer_from(&mut self, other: &mut Queue::<T>) -> () {
+            // Self should be reset, transfer in "other", then "other" should be clear
+            // Implement as a function of other functions
+            self.clear();
+            while other.length() > 0 {
+                self.enqueue(other.dequeue());
             }
         }
 
