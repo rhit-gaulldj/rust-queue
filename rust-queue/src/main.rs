@@ -4,6 +4,8 @@ use queue::queue::{Queue, QueueContract};
 
 use std::io::{stdin, stdout, Write};
 
+// Lots of help from https://rust-unofficial.github.io/too-many-lists/
+
 fn main() {
     println!("Initialized");
 
@@ -73,9 +75,32 @@ fn get_index() -> u32 {
     }
 }
 
+fn get_element() -> u32 {
+    let mut input_text = String::new();
+
+    loop {
+        println!("Enter an integer element: ");
+        stdin().read_line(&mut input_text).expect("Did not enter a correct string");
+        println!();
+
+        let trimmed = input_text.trim();
+        match trimmed.parse::<u32>() {
+            Ok(i) => {
+                return i;
+            },
+            Err(..) => println!("Please enter a number!")
+        }
+    }
+}
+
 fn do_enqueue(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
     let index = get_index();
-    println!("Not implemented");
+    let item = get_element();
+    if index == 1 {
+        q1.enqueue(item);
+    } else {
+        q2.enqueue(item);
+    }
 }
 
 fn do_dequeue(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
@@ -85,7 +110,12 @@ fn do_dequeue(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
 
 fn do_replace_front(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
     let index = get_index();
-    println!("Not implemented");
+    let item = get_element();
+    if index == 1 {
+        q1.replaceFront(item);
+    } else {
+        q2.replaceFront(item);
+    }
 }
 
 fn do_front(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
@@ -124,7 +154,11 @@ fn do_copy(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
 
 fn do_display(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
     let index = get_index();
-    println!("Not implemented");
+    if index == 1 {
+        q1.print();
+    } else {
+        q2.print();
+    }
 }
 
 fn do_clear(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
