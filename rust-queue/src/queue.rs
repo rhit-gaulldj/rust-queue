@@ -1,7 +1,9 @@
 pub mod queue {
     use std::ptr::NonNull;
 
-    pub trait QueueContract<T> where T : core::fmt::Display {
+    // Need Display trait for print
+    // Need Copy trait for assign
+    pub trait QueueContract<T> where T : core::fmt::Display, T : std::marker::Copy {
         fn clear(&mut self) -> ();
         fn transfer_from(&mut self, other: &mut Queue::<T>) -> ();
         fn enqueue(&mut self, x: T) -> ();
@@ -10,7 +12,7 @@ pub mod queue {
         fn front(&self) -> &T;
         fn length(&self) -> u32;
         // Note: Cannot overload the Rust assignment operator
-        // fn assign(&mut self, other: &Queue::<T>) -> ();
+        fn assign(&mut self, other: &Queue::<T>) -> ();
         fn print(&self) -> ();
     }
 
@@ -26,7 +28,7 @@ pub mod queue {
         length: u32,
     }
 
-    impl<T> QueueContract<T> for Queue<T> where T : core::fmt::Display {
+    impl<T> QueueContract<T> for Queue<T> where T : core::fmt::Display, T : std::marker::Copy {
         fn clear(&mut self) -> () {
             // Rust should clean up for us
             self.head = None;
@@ -129,6 +131,25 @@ pub mod queue {
             self.clear();
             while other.length() > 0 {
                 self.enqueue(other.dequeue());
+            }
+        }
+
+        fn assign(&mut self, other: &Queue::<T>) -> () {
+            self.clear();
+            
+            let mut current_node = other.head;
+            loop {
+                match current_node {
+                    None => break,
+                    Some(ptr) => {
+                        unsafe {
+                            let ptr = ptr.as_ptr();
+                            let item = (*ptr).item;
+                            self.enqueue(item);
+                            current_node = (*ptr).next;
+                        }
+                    },
+                }
             }
         }
 
