@@ -5,7 +5,7 @@ pub mod queue {
         fn clear(&mut self) -> ();
         // fn transferFrom(&mut self, other: &mut Queue::<T>) -> ();
         fn enqueue(&mut self, x: T) -> ();
-        // fn dequeue(&mut self) -> T;
+        fn dequeue(&mut self) -> &T;
         fn replaceFront(&mut self, x: T) -> &T;
         fn front(&self) -> &T;
         fn length(&self) -> u32;
@@ -64,15 +64,13 @@ pub mod queue {
             self.length
         }
 
-        // NOTE: Need to switch to enqueue on the end
         fn enqueue(&mut self, item: T) -> () {
             unsafe {
-                // Just make it so that head points to a new node that points to the previous head
                 let new_node: NodePointer<T> = Some(NonNull::new_unchecked(
                     Box::into_raw(Box::new(
                         Node {
                             item: item,
-                            next: self.head.take(),
+                            next: None,
                         }
                     ))
                 ));
@@ -86,7 +84,6 @@ pub mod queue {
                         return;
                     },
                     Some(boxed) => {
-                        // Continue, but set our variables first
                         current_node = *boxed;
                     },
                 };
@@ -103,6 +100,18 @@ pub mod queue {
                     }
                 }
             }
+        }
+
+        fn dequeue(&mut self) -> &T {
+            let mut current_node: NonNull<Node<T>>;
+            match &mut self.head {
+                None => panic!("Cannot call dequeue on an empty queue!"),
+                Some(ptr) => {
+                    current_node = *ptr;
+                },
+            };
+            // TODO: Finish
+            panic!("Not implemented");
         }
 
         fn print(&self) -> () {
