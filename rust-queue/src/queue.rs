@@ -5,8 +5,8 @@ pub mod queue {
         fn clear(&mut self) -> ();
         // fn transferFrom(&mut self, other: &mut Queue::<T>) -> ();
         fn enqueue(&mut self, x: T) -> ();
-        fn dequeue(&mut self) -> &T;
-        fn replaceFront(&mut self, x: T) -> &T;
+        fn dequeue(&mut self) -> T;
+        fn replace_front(&mut self, x: T) -> T;
         fn front(&self) -> &T;
         fn length(&self) -> u32;
         // Note: Cannot overload the Rust assignment operator
@@ -46,13 +46,14 @@ pub mod queue {
             }
         }
 
-        fn replaceFront(&mut self, x: T) -> &T {
+        fn replace_front(&mut self, x: T) -> T {
             match self.head.as_ref() {
                 None => panic!("Cannot call replaceFront on an empty queue!"),
                 Some(node) => {
                     let ptr: *mut Node<T> = node.as_ptr();
                     unsafe {
-                        let item: &T = &(*ptr).item;
+                        let boxed_node = Box::from_raw(ptr);
+                        let item = (*boxed_node).item;
                         (*ptr).item = x;
                         item
                     }
@@ -74,6 +75,8 @@ pub mod queue {
                         }
                     ))
                 ));
+
+                self.length += 1;
 
                 // A bit messy... check if head is null first. If so, replace it
                 // These variables are only used when head is not null
@@ -102,16 +105,22 @@ pub mod queue {
             }
         }
 
-        fn dequeue(&mut self) -> &T {
-            let mut current_node: NonNull<Node<T>>;
+        fn dequeue(&mut self) -> T {
+            self.length -= 1;
             match &mut self.head {
                 None => panic!("Cannot call dequeue on an empty queue!"),
                 Some(ptr) => {
-                    current_node = *ptr;
+                    // Move the head to the next, and return the value at the head
+                    unsafe {
+                        let node = ptr.as_ptr();
+                        // Box stuff magically makes this compile?
+                        let boxed_node = Box::from_raw(node);
+                        let item = (*boxed_node).item;
+                        self.head = (*node).next;
+                        item
+                    }
                 },
-            };
-            // TODO: Finish
-            panic!("Not implemented");
+            }
         }
 
         fn print(&self) -> () {

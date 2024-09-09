@@ -105,33 +105,29 @@ fn do_enqueue(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
 
 fn do_dequeue(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
     let index = get_index();
-    println!("Not implemented");
+    if index == 1 {
+        println!("Dequeued from q{}: {}", index, q1.dequeue());
+    } else {
+        println!("Dequeued from q{}: {}", index, q2.dequeue());
+    }
 }
 
 fn do_replace_front(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
     let index = get_index();
     let item = get_element();
     if index == 1 {
-        q1.replaceFront(item);
+        println!("Front pulled from q{}: {}", index, q1.replace_front(item));
     } else {
-        q2.replaceFront(item);
+        println!("Front pulled from q{}: {}", index, q2.replace_front(item));
     }
 }
 
 fn do_front(q1: &mut Queue<u32>, q2: &mut Queue<u32>) -> () {
     let index = get_index();
     if index == 1 {
-        if q1.length() > 0 {
-            println!("Front of q{}: {}", index, q1.front());
-        } else {
-            println!("Error! Cannot get front of an empty queue");
-        }
+        println!("Front of q{}: {}", index, q1.front());
     } else {
-        if q2.length() > 0 {
-            println!("Front of q{}: {}", index, q2.front());
-        } else {
-            println!("Error! Cannot get front of an empty queue");
-        }
+        println!("Front of q{}: {}", index, q2.front());
     }
 }
 
